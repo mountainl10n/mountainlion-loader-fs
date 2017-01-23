@@ -1,18 +1,15 @@
 var fs = require('fs');
-var Promise = require('lie');
-module.exports = function(value) {
+module.exports = function(value, callback) {
 	if(typeof value == "string") {
-		return new Promise(function(resolve, reject) {
-			fs.readFile(value, function(err, content) {
-				if(err) {
-					reject(err);
-					return;
-				}
-				resolve(content.toString());
-			});
+		fs.readFile(value, function(err, content) {
+			if(err) {
+				callback(err);
+				return;
+			}
+			callback(null, content.toString());
 		});
 	}
 	else {
-		return Promise.reject("Invalid path to load");
+		callback("Invalid path to load");
 	}
 };
